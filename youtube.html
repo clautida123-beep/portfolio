@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clone YouTube – Clautida</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --vert:    #3A5A40;
+      --vert2:   #7B9B84;
+      --beige:   rgb(240, 220, 190);
+      --noir:    #0F1412;
+      --gris:    #6b7280;
+      --fond:    #fafaf8;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--fond);
+      color: var(--noir);
+      overflow-x: hidden;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 70px;
+      background: rgba(250,250,248,0.92);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 60px;
+      z-index: 100;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      color: var(--noir);
+      text-decoration: none;
+    }
+
+    .nav-retour {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--gris);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-retour:hover { color: var(--vert); }
+
+    .nav-retour svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding-top: 140px;
+      padding-bottom: 80px;
+      padding-left: 100px;
+      padding-right: 100px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      min-height: 90vh;
+      background: linear-gradient(135deg, #fff 60%, rgb(240,220,190,0.25));
+    }
+
+    .hero-tag {
+      display: inline-block;
+      background-color: rgba(58, 90, 64, 0.1);
+      color: var(--vert);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(38px, 5vw, 62px);
+      line-height: 1.1;
+      margin-bottom: 24px;
+      color: var(--noir);
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--vert);
+    }
+
+    .hero-desc {
+      font-size: 18px;
+      line-height: 1.7;
+      color: var(--gris);
+      margin-bottom: 40px;
+      max-width: 480px;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 40px;
+    }
+
+    .badge {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--noir);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: var(--vert);
+      color: white;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      padding: 13px 26px;
+      border-radius: 8px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      box-shadow: 0 4px 14px rgba(58,90,64,0.25);
+    }
+
+    .btn-primary:hover {
+      background-color: #324e38;
+      transform: translateY(-2px);
+    }
+
+    .btn-primary svg { width: 18px; height: 18px; fill: white; }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: white;
+      color: var(--noir);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      padding: 13px 26px;
+      border-radius: 8px;
+      text-decoration: none;
+      border: 1px solid #e5e7eb;
+      cursor: pointer;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .btn-secondary:hover {
+      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary svg { width: 18px; height: 18px; fill: currentColor; }
+
+    /* Image hero */
+    .hero-image {
+      position: relative;
+    }
+
+    .hero-image img {
+      width: 100%;
+      border-radius: 16px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+      display: block;
+    }
+
+    .hero-image-placeholder {
+      width: 600px;
+      aspect-ratio: 16/10;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #e5e7eb, #f3f4f6);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: #9ca3af;
+      font-size: 15px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.12);
+      border: 2px dashed #d1d5db;
+    }
+
+    .hero-image-placeholder svg {
+      width: 48px;
+      height: 48px;
+      fill: #d1d5db;
+    }
+
+    .image-badge {
+      position: absolute;
+      bottom: -20px;
+      left: -20px;
+      background: white;
+      border-radius: 12px;
+      padding: 14px 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .image-badge-dot {
+      width: 10px;
+      height: 10px;
+      background: #22c55e;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .image-badge span {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--noir);
+    }
+
+    /* ── STATS ── */
+    .stats {
+      background: var(--noir);
+      padding: 50px 100px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: 'DM Serif Display', serif;
+      font-size: 48px;
+      color: var(--beige);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: #9ca3af;
+      font-weight: 400;
+    }
+
+    /* ── SECTIONS ── */
+    section.content {
+      padding: 100px;
+    }
+
+    section.content.alt {
+      background: white;
+    }
+
+    .section-label {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--vert2);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(28px, 3vw, 40px);
+      line-height: 1.2;
+      margin-bottom: 20px;
+      color: var(--noir);
+    }
+
+    .section-text {
+      font-size: 17px;
+      line-height: 1.8;
+      color: var(--gris);
+      max-width: 650px;
+    }
+
+    /* ── CONTEXTE ── */
+    .contexte-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    /* ── CAPTURES ── */
+    .captures-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 60px;
+    }
+
+    .capture-card {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+      background: #f3f4f6;
+    }
+
+    .capture-card img {
+      width: 100%;
+      display: block;
+    }
+
+    .capture-placeholder {
+      aspect-ratio: 16/9;
+      background: linear-gradient(135deg, #e5e7eb, #f3f4f6);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: #9ca3af;
+      font-size: 14px;
+      border: 2px dashed #d1d5db;
+    }
+
+    .capture-placeholder svg {
+      width: 36px;
+      height: 36px;
+      fill: #d1d5db;
+    }
+
+    .capture-label {
+      padding: 16px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--gris);
+      background: white;
+    }
+
+    /* ── APPRENTISSAGES ── */
+    .apprentissages-list {
+      margin-top: 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .apprentissage-item {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 24px;
+      border-left: 4px solid var(--beige);
+      transition: box-shadow 0.2s, border-left-color 0.2s;
+    }
+
+    .apprentissage-item:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      border-left-color: var(--vert);
+    }
+
+    .apprentissage-item h4 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--noir);
+    }
+
+    .apprentissage-item p {
+      font-size: 14px;
+      color: var(--gris);
+      line-height: 1.6;
+    }
+
+    /* ── STACK TECHNIQUE ── */
+    .stack {
+      background: var(--fond);
+      padding: 80px 100px;
+    }
+
+    .stack-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 40px;
+    }
+
+    .stack-item {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 500;
+      font-size: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .stack-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--vert);
+      border-radius: 50%;
+    }
+
+    /* ── CTA FINAL ── */
+    .cta-final {
+      background: var(--noir);
+      padding: 100px;
+      text-align: center;
+    }
+
+    .cta-final h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(28px, 4vw, 48px);
+      color: white;
+      margin-bottom: 20px;
+    }
+
+    .cta-final p {
+      font-size: 17px;
+      color: #9ca3af;
+      margin-bottom: 40px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 0 24px; }
+
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 120px 24px 60px;
+        gap: 40px;
+        min-height: unset;
+      }
+
+      .hero-image { order: -1; }
+
+      .image-badge { left: 10px; bottom: -14px; }
+
+      .stats {
+        grid-template-columns: 1fr;
+        padding: 50px 24px;
+        gap: 30px;
+      }
+
+      section.content { padding: 60px 24px; }
+
+      .contexte-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .captures-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .apprentissages-list {
+        grid-template-columns: 1fr;
+      }
+
+      .stack { padding: 60px 24px; }
+
+      .cta-final { padding: 60px 24px; }
+    }
+
+    /* ── ANIMATIONS ── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <a href="index.html" class="nav-logo">Clautida</a>
+    <a href="index.html#Portfolio" class="nav-retour">
+      <svg viewBox="0 -960 960 960"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
+      Retour au portfolio
+    </a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-content">
+      <span class="hero-tag">Projet web · UI/UX</span>
+      <h1>Clone <em>YouTube</em></h1>
+      <p class="hero-desc">
+        Reproduction fidèle de l'interface YouTube avec une attention 
+        particulière portée sur la navigation, la mise en page responsive 
+        et l'expérience utilisateur.
+      </p>
+      <div class="hero-badges">
+        <span class="badge">HTML</span>
+        <span class="badge">CSS</span>
+        <span class="badge">Responsive</span>
+      </div>
+      <div class="hero-actions">
+        
+        <a href="#" class="btn-primary" target="_blank">
+          <svg viewBox="0 -960 960 960"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h560v-280h80v280q0 33-23.5 56.5T760-120H200Zm188-212-56-56 372-372H560v-80h280v280h-80v-144L388-332Z"/></svg>
+          Voir le projet en live
+        </a>
+       
+        <a href="#" class="btn-secondary" target="_blank">
+          <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.37.6.1.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.08-.74.08-.72.08-.72 1.2.08 1.83 1.23 1.83 1.23 1.06 1.82 2.8 1.3 3.48.99.1-.77.41-1.3.75-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          Voir sur GitHub
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-image">
+      
+      <div class="hero-image-placeholder">
+        <img src="photos/Capture d'écran 2026-05-02 162230.png" alt="capture d'écran Youtube" class="photo">
+      </div>
+      <div class="image-badge">
+        <div class="image-badge-dot"></div>
+        <span>Projet complété</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div>
+      <div class="stat-number">100%</div>
+      <div class="stat-label">Responsive — mobile & desktop</div>
+    </div>
+    <div>
+      
+      <div class="stat-number">2 sem.</div>
+      <div class="stat-label">Durée de réalisation</div>
+    </div>
+    <div>
+      <div class="stat-number">2</div>
+      <div class="stat-label">Technologies utilisées</div>
+    </div>
+  </div>
+
+  <!-- CONTEXTE -->
+  <section class="content alt fade-in">
+    <div class="contexte-grid">
+      <div>
+        <p class="section-label">Contexte</p>
+        <h2 class="section-title">Pourquoi ce projet ?</h2>
+      </div>
+      <div>
+        
+        <p class="section-text">
+          J'ai créé ce clone YouTube pour approfondir ma maîtrise du HTML et du CSS 
+          en reproduisant une interface complexe et bien connue. L'objectif était de 
+          comprendre comment structurer une page avec de nombreux composants imbriqués, 
+          gérer la grille de vidéos et rendre l'ensemble responsive.
+        </p>
+        <br>
+        <p class="section-text">
+          Ce projet m'a permis de travailler sur la fidélité visuelle, la gestion des 
+          icônes SVG et l'organisation claire du code CSS.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAPTURES D'ÉCRAN -->
+  <section class="content fade-in">
+    <p class="section-label">Visuels</p>
+    <h2 class="section-title">Aperçu du projet</h2>
+
+    <div class="captures-grid">
+      <div class="capture-card">
+        
+        <div class="capture-placeholder">
+         <img src="photos/Capture d'écran 2026-05-02 162230.png" alt="Page d'accueil">
+        </div>
+        <div class="capture-label">Page d'accueil — grille de vidéos</div>
+      </div>
+
+      <div class="capture-card">
+        <div class="capture-placeholder">
+          <img src="photos/Capture d'écran 2026-05-02 164135.png" alt="Page de video">
+        </div>
+        <div class="capture-label">Page de lecture vidéo</div>
+      </div>
+
+      <div class="capture-card">
+        <div class="capture-placeholder">
+          <img src="photos/Capture d'écran 2026-05-04 142850.png" alt="Vue sur mobile">
+          
+        </div>
+        <div class="capture-label">Vue mobile responsive</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- APPRENTISSAGES -->
+  <section class="content alt fade-in">
+    <p class="section-label">Apprentissages</p>
+    <h2 class="section-title">Ce que j'ai appris</h2>
+
+    <div class="apprentissages-list">
+      <!-- ✏️ Adapte ces points à ce que TU as vraiment appris -->
+      <div class="apprentissage-item">
+        <h4>Grilles CSS complexes</h4>
+        <p>Utilisation de CSS Grid pour reproduire la mise en page des vignettes vidéo avec un comportement responsive fluide.</p>
+      </div>
+      <div class="apprentissage-item">
+        <h4>Organisation du code</h4>
+        <p>Structuration du HTML en composants réutilisables (navbar, card vidéo, sidebar) pour un code lisible et maintenable.</p>
+      </div>
+      <div class="apprentissage-item">
+        <h4>Fidélité visuelle</h4>
+        <p>Reproduction précise d'une interface existante, en respectant les proportions, les couleurs et les espacements.</p>
+      </div>
+      <div class="apprentissage-item">
+        <h4>Responsive design</h4>
+        <p>Adaptation de l'interface à différentes tailles d'écran grâce aux media queries et aux unités relatives.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STACK TECHNIQUE -->
+  <div class="stack fade-in">
+    <p class="section-label">Stack technique</p>
+    <h2 class="section-title">Technologies utilisées</h2>
+    <div class="stack-grid">
+      <div class="stack-item"><span class="stack-dot"></span> HTML5</div>
+      <div class="stack-item"><span class="stack-dot"></span> CSS3</div>
+      <div class="stack-item"><span class="stack-dot"></span> CSS Grid & Flexbox</div>
+      <div class="stack-item"><span class="stack-dot"></span> Responsive Design</div>
+      <!-- ✏️ Ajoute d'autres technos si nécessaire -->
+    </div>
+  </div>
+
+  <!-- CTA FINAL -->
+  <div class="cta-final fade-in">
+    <h2>Vous avez un projet en tête ?</h2>
+    <p>Je suis disponible pour des missions freelance. Parlons de votre idée.</p>
+    <a href="index.html#Contact" class="btn-primary">
+      <svg viewBox="0 -960 960 960" style="fill:white"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z"/></svg>
+      Me contacter
+    </a>
+  </div>
+
+  <script>
+    // Animation au scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
