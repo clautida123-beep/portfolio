@@ -190,7 +190,7 @@ html, body {
       position: relative;
        width:350px;
        height: 500px;
-       background-image: url(/photos/profil.jpeg);   
+       background-image: url(photos/profil.jpeg);   
        background-position: center;
        background-size: cover;
        background-repeat: no-repeat;
