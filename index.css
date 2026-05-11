@@ -769,47 +769,47 @@ html, body {
       transform: translateY(5px) translateX(8px);
     }
 
-    .couture{
+    .quiz{
       border: 1px solid #d5d9d9;
       margin-bottom : 0;
       border-radius: 8px;
       height: 500px;
     }
 
-    .couture:hover{
+    .quiz:hover{
       box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     }
 
-    .couture-icon{
+    .quiz-icon{
       height: 230px;
       width: 428px;
       object-fit: cover;
     }
 
-    .couture-test{
+    .quiz-test{
       padding: 32px;
       padding-top: 5px;
     }
 
-    .couture1{
+    .quiz1{
       font-family: Arial;
       color: #9CA3AF;
       font-size: 14px;
     }
 
-    .couture-clone{
+    .quiz-clone{
       font-family: Arial;
       font-size: 20px;
       font-weight: bold;
     }
 
-    .couture-contain{
+    .quiz-contain{
       font-family: Arial;
       font-size: 15px;
       color: gray;
     }
 
-    .button-couture{
+    .button-quiz{
       padding-left: 20px;
       padding-right: 20px;
       padding-top: 8px;
@@ -821,7 +821,7 @@ html, body {
       border: 1px solid #d5d9d9;
     }
 
-    .button-couture svg{
+    .button-quiz svg{
       width: 22px;
       height: 22px;
       fill: black;
@@ -1620,7 +1620,7 @@ html, body {
   .youtube-icon,
   .amazon-icon,
   .superconnect-icon,
-  .couture-icon,
+  .quiz-icon,
   .restaurant-icon,
   .calculatrice-delphi-icon {
     width: 100%;
@@ -1891,7 +1891,7 @@ html, body {
   .youtube,
   .amazon,
   .superconnect,
-  .couture,
+  .quiz,
   .restaurant,
   .calculatrice-delphi {
     height: auto;
@@ -1900,7 +1900,7 @@ html, body {
   .youtube-icon,
   .amazon-icon,
   .superconnect-icon,
-  .couture-icon,
+  .quiz-icon,
   .restaurant-icon,
   .calculatrice-delphi-icon {
     width: 100%;
