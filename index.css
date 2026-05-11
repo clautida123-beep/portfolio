@@ -649,47 +649,47 @@ html, body {
       transform: translateY(5px) translateX(8px);
     }
 
-    .python-game{
+    .amazon{
       margin-bottom : 0;
       border-radius: 8px;
       border: 1px solid #d5d9d9;
       height: 500px;
     }
 
-    .python-game:hover{
+    .amazon:hover{
       box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;;
     }
 
-    .python-icon{
+    .amazon-icon{
       height: 230px;
       width: 428px;
       object-fit: cover;
     }
 
-    .python-test{
+    .amazon-test{
       padding: 32px;
       padding-top: 5px;
     }
 
-    .python1{
+    .amazon1{
       font-family: Arial;
       color: #9CA3AF;
       font-size: 14px;
     }
 
-    .python{
+    .amazon-title{
       font-family: Arial;
       font-size: 20px;
       font-weight: bold;
     }
 
-    .python-contain{
+    .amazon-contain{
       font-family: Arial;
       font-size: 15px;
       color: gray;
     }
 
-    .button-python{
+    .button-amazon{
       padding-left: 20px;
       padding-right: 20px;
       padding-top: 8px;
@@ -701,7 +701,7 @@ html, body {
       border: 1px solid #d5d9d9;
     }
 
-    .button-python svg{
+    .button-amazon svg{
       width: 22px;
       height: 22px;
       fill: black;
@@ -709,47 +709,47 @@ html, body {
       transform: translateY(5px) translateX(8px);
     }
 
-    .boutique-online{
+    .superconnect{
       border: 1px solid #d5d9d9;
       margin-bottom : 0;
       border-radius: 8px;
       height: 500px;
     }
 
-    .boutique-online:hover{
+    .superconnect:hover{
       box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;;
     }
 
-    .boutique-online-icon{
+    .superconnect-icon{
       height: 230px;
       width: 428px;
       object-fit: cover;
     }
 
-    .boutique-online-test{
+    .superconnect-test{
       padding: 32px;
       padding-top: 5px;
     }
 
-    .boutique-online1{
+    .superconnect1{
       font-family: Arial;
       color: #9CA3AF;
       font-size: 14px;
     }
 
-    .boutique-online-clone{
+    .superconnect-clone{
       font-family: Arial;
       font-size: 20px;
       font-weight: bold;
     }
 
-    .boutique-online-contain{
+    .superconnect-contain{
       font-family: Arial;
       font-size: 15px;
       color: gray;
     }
 
-    .button-boutique-online{
+    .button-superconnect{
      padding-left: 20px;
       padding-right: 20px;
       padding-top: 8px;
@@ -761,7 +761,7 @@ html, body {
       border: 1px solid #d5d9d9;
     }
 
-    .button-boutique-online svg{
+    .button-superconnect svg{
       width: 22px;
       height: 22px;
       fill: black;
@@ -1618,8 +1618,8 @@ html, body {
   }
 
   .youtube-icon,
-  .python-icon,
-  .boutique-online-icon,
+  .amazon-icon,
+  .superconnect-icon,
   .couture-icon,
   .restaurant-icon,
   .calculatrice-delphi-icon {
@@ -1889,8 +1889,8 @@ html, body {
   }
 
   .youtube,
-  .python-game,
-  .boutique-online,
+  .amazon,
+  .superconnect,
   .couture,
   .restaurant,
   .calculatrice-delphi {
@@ -1898,8 +1898,8 @@ html, body {
   }
 
   .youtube-icon,
-  .python-icon,
-  .boutique-online-icon,
+  .amazon-icon,
+  .superconnect-icon,
   .couture-icon,
   .restaurant-icon,
   .calculatrice-delphi-icon {

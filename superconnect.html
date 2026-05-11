@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SuperConnect — Présentation du projet</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0f1e;
+      --accent: #63beff;
+      --accent2: #a78bfa;
+      --text: #f0f4ff;
+      --muted: rgba(240,244,255,0.45);
+      --border: rgba(255,255,255,0.09);
+      --success: #4ade80;
+      --card: rgba(15,22,44,0.85);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── BACKGROUND ── */
+    .bg-fixed {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(99,190,255,0.10) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 80%, rgba(167,139,250,0.08) 0%, transparent 60%);
+    }
+
+    .grid-fixed {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(99,190,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99,190,255,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: 68px; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 60px;
+      background: rgba(10,15,30,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .nav-logo-icon svg { width: 16px; height: 16px; }
+
+    .nav-logo-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      background-clip: text; -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-back {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 14px; color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-back:hover { color: var(--text); }
+    .nav-back svg { width: 16px; height: 16px; fill: currentColor; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 120px 100px 80px;
+      gap: 80px;
+    }
+
+    .hero-left { flex: 1; }
+
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(99,190,255,0.08);
+      border: 1px solid rgba(99,190,255,0.2);
+      color: var(--accent);
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 6px 14px; border-radius: 20px;
+      margin-bottom: 28px;
+      animation: fadeUp 0.6s both;
+    }
+
+    .hero-tag-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent);
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(42px, 5.5vw, 72px);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+      animation: fadeUp 0.6s 0.1s both;
+    }
+
+    .hero h1 .gradient {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      background-clip: text; -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
+      font-size: 18px; line-height: 1.7;
+      color: var(--muted); max-width: 500px;
+      margin-bottom: 40px;
+      animation: fadeUp 0.6s 0.2s both;
+    }
+
+    .hero-badges {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      margin-bottom: 40px;
+      animation: fadeUp 0.6s 0.25s both;
+    }
+
+    .badge {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 7px 16px;
+      font-size: 13px; font-weight: 500;
+      color: var(--text);
+    }
+
+    .hero-actions {
+      display: flex; gap: 14px; flex-wrap: wrap;
+      animation: fadeUp 0.6s 0.3s both;
+    }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: var(--bg);
+      font-family: 'Syne', sans-serif;
+      font-weight: 700; font-size: 14px;
+      padding: 13px 26px; border-radius: 10px;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 8px 24px rgba(99,190,255,0.25);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(99,190,255,0.35);
+    }
+
+    .btn-primary svg { width: 16px; height: 16px; }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      font-weight: 600; font-size: 14px;
+      padding: 13px 26px; border-radius: 10px;
+      text-decoration: none; cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      border-color: rgba(99,190,255,0.3);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary svg { width: 16px; height: 16px; fill: currentColor; }
+
+    /* Hero right — preview card */
+    .hero-right {
+      flex: 1; max-width: 520px;
+      animation: fadeUp 0.6s 0.15s both;
+    }
+
+    .preview-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(99,190,255,0.06);
+    }
+
+    .preview-topbar {
+      background: rgba(10,15,30,0.9);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 18px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .preview-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+    }
+
+    .preview-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 12px; font-weight: 600;
+      color: var(--muted); margin-left: 8px;
+    }
+
+    .preview-body {
+      padding: 28px;
+    }
+
+    /* Mini login mockup */
+    .mini-brand {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .mini-brand-icon {
+      width: 28px; height: 28px; border-radius: 7px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .mini-brand-icon svg { width: 14px; height: 14px; }
+
+    .mini-brand-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 14px; font-weight: 700;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      background-clip: text; -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .mini-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px; font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .mini-sub {
+      font-size: 12px; color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .mini-roles {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 7px; margin-bottom: 16px;
+    }
+
+    .mini-role {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 8px 10px;
+      font-size: 11px; color: var(--muted);
+      display: flex; align-items: center; gap: 6px;
+    }
+
+    .mini-role.active-role {
+      background: rgba(99,190,255,0.1);
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    .mini-pw {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: 12px; color: var(--muted);
+      margin-bottom: 14px;
+      letter-spacing: 0.2em;
+    }
+
+    .mini-btn {
+      width: 100%; padding: 11px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none; border-radius: 10px;
+      font-family: 'Syne', sans-serif;
+      font-size: 13px; font-weight: 700;
+      color: var(--bg); cursor: pointer;
+    }
+
+    /* ── MOT DE PASSE BANNER ── */
+    .password-banner {
+      position: relative; z-index: 1;
+      margin: 0 100px 60px;
+      background: rgba(99,190,255,0.06);
+      border: 1px solid rgba(99,190,255,0.2);
+      border-radius: 16px;
+      padding: 24px 32px;
+      display: flex; align-items: center; gap: 20px;
+    }
+
+    .pw-banner-icon {
+      width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+      background: rgba(99,190,255,0.12);
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .pw-banner-icon svg { width: 22px; height: 22px; color: var(--accent); }
+
+    .pw-banner-text h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 16px; font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .pw-banner-text p {
+      font-size: 14px; color: var(--muted);
+    }
+
+    .pw-code {
+      margin-left: auto; flex-shrink: 0;
+      background: var(--bg);
+      border: 1px solid rgba(99,190,255,0.3);
+      border-radius: 10px;
+      padding: 10px 24px;
+      font-family: 'Syne', sans-serif;
+      font-size: 28px; font-weight: 800;
+      color: var(--accent);
+      letter-spacing: 0.3em;
+    }
+
+    /* ── STATS ── */
+    .stats {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 80px;
+    }
+
+    .stat {
+      background: var(--bg);
+      padding: 40px 30px;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 42px; font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      background-clip: text; -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+
+    .stat-lbl {
+      font-size: 13px; color: var(--muted);
+    }
+
+    /* ── FONCTIONNALITÉS ── */
+    .section {
+      position: relative; z-index: 1;
+      padding: 0 100px 80px;
+    }
+
+    .section-label {
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(28px, 3vw, 42px);
+      font-weight: 800; letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .section-desc {
+      font-size: 16px; color: var(--muted);
+      max-width: 600px; line-height: 1.7;
+      margin-bottom: 50px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+
+    .feature-card:hover {
+      border-color: rgba(99,190,255,0.25);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+    }
+
+    .feature-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: rgba(99,190,255,0.08);
+      border: 1px solid rgba(99,190,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 18px;
+    }
+
+    .feature-icon svg { width: 20px; height: 20px; color: var(--accent); }
+
+    .feature-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 16px; font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .feature-desc {
+      font-size: 14px; color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── RÔLES ── */
+    .roles-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      margin-top: 50px;
+    }
+
+    .role-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 16px;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .role-card:hover {
+      border-color: rgba(99,190,255,0.3);
+      transform: translateY(-3px);
+    }
+
+    .role-emoji { font-size: 28px; margin-bottom: 12px; }
+
+    .role-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 14px; font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .role-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+    /* ── APPRENTISSAGES ── */
+    .learn-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 16px; margin-top: 50px;
+    }
+
+    .learn-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 12px;
+      padding: 22px 24px;
+      transition: box-shadow 0.2s;
+    }
+
+    .learn-item:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+
+    .learn-item h4 {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px; font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .learn-item p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    /* ── STACK ── */
+    .stack-pills {
+      display: flex; flex-wrap: wrap; gap: 12px;
+      margin-top: 40px;
+    }
+
+    .stack-pill {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 20px;
+      font-size: 14px; font-weight: 500;
+    }
+
+    .stack-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+    }
+
+    /* ── CTA ── */
+    .cta {
+      position: relative; z-index: 1;
+      margin: 0 100px 100px;
+      background: linear-gradient(135deg, rgba(99,190,255,0.08), rgba(167,139,250,0.08));
+      border: 1px solid rgba(99,190,255,0.15);
+      border-radius: 24px;
+      padding: 70px;
+      text-align: center;
+    }
+
+    .cta h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 800; letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .cta p {
+      font-size: 17px; color: var(--muted);
+      margin-bottom: 36px;
+      max-width: 500px; margin-left: auto; margin-right: auto;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 0 20px; }
+
+      .hero {
+        flex-direction: column;
+        padding: 100px 24px 60px;
+        gap: 40px;
+      }
+
+      .hero-right { max-width: 100%; }
+
+      .password-banner {
+        margin: 0 24px 40px;
+        flex-wrap: wrap;
+      }
+
+      .pw-code { margin-left: 0; }
+
+      .stats { grid-template-columns: 1fr 1fr; }
+
+      .section { padding: 0 24px 60px; }
+
+      .features-grid { grid-template-columns: 1fr; }
+
+      .roles-grid { grid-template-columns: repeat(2, 1fr); }
+
+      .learn-grid { grid-template-columns: 1fr; }
+
+      .cta { margin: 0 24px 60px; padding: 40px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-fixed"></div>
+  <div class="grid-fixed"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html#Portfolio" class="nav-back">
+      <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+      Retour au portfolio
+    </a>
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013 5.18 2 2 0 015 3h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L9.09 10.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+        </svg>
+      </div>
+      <span class="nav-logo-name">SuperConnect</span>
+    </a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-left">
+      <div class="hero-tag">
+        <div class="hero-tag-dot"></div>
+        Projet web · HTML CSS JS
+      </div>
+      <h1>Système de<br><span class="gradient">téléphonie</span><br>interne</h1>
+      <p class="hero-desc">
+        Application web de communication interne pour supermarché,
+        permettant à 5 types d'agents de se connecter, communiquer
+        et gérer leur espace de travail en temps réel.
+      </p>
+      <div class="hero-badges">
+        <span class="badge">HTML5</span>
+        <span class="badge">CSS3</span>
+        <span class="badge">JavaScript</span>
+        <span class="badge">Multi-rôles</span>
+        <span class="badge">Temps réel</span>
+      </div>
+      <div class="hero-actions">
+        <a href="https://clautida123-beep.github.io/binarymind/Caissier/main.html" target="_blank" class="btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Voir le projet en live
+        </a>
+        <a href="https://github.com/clautida123-beep/binarymind" target="_blank" class="btn-secondary">
+          <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.37.6.1.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.08-.74.08-.72.08-.72 1.2.08 1.83 1.23 1.83 1.23 1.06 1.82 2.8 1.3 3.48.99.1-.77.41-1.3.75-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          Voir sur GitHub
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="preview-card">
+        <div class="preview-topbar">
+          <div class="preview-dot" style="background:#ff5f57"></div>
+          <div class="preview-dot" style="background:#febc2e"></div>
+          <div class="preview-dot" style="background:#28c840"></div>
+          <span class="preview-title">SuperConnect — Connexion</span>
+        </div>
+        <div class="preview-body">
+          <div class="mini-brand">
+            <div class="mini-brand-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013 5.18 2 2 0 015 3h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L9.09 10.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+              </svg>
+            </div>
+            <span class="mini-brand-name">SuperConnect</span>
+          </div>
+          <div class="mini-title">Bonne journée, qui êtes-vous ?</div>
+          <div class="mini-sub">Système de téléphonie interne — Supermarché</div>
+          <div class="mini-roles">
+            <div class="mini-role active-role">🛒 Caissier·ère</div>
+            <div class="mini-role">📊 Comptable</div>
+            <div class="mini-role">👔 Manager</div>
+            <div class="mini-role">🔒 Sécurité</div>
+          </div>
+          <div class="mini-pw">••••</div>
+          <button class="mini-btn">Se connecter</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOT DE PASSE BANNER -->
+  <div class="password-banner reveal">
+    <div class="pw-banner-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+        <path d="M7 11V7a5 5 0 0110 0v4"/>
+      </svg>
+    </div>
+    <div class="pw-banner-text">
+      <h3>Mot de passe d'accès</h3>
+      <p>Utilisez ce mot de passe pour tous les rôles afin de tester le projet en live</p>
+    </div>
+    <div class="pw-code">1234</div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats reveal">
+    <div class="stat">
+      <div class="stat-num">5</div>
+      <div class="stat-lbl">Rôles différents</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">3</div>
+      <div class="stat-lbl">Technologies</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">100%</div>
+      <div class="stat-lbl">Vanilla JS</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">Live</div>
+      <div class="stat-lbl">Données en temps réel</div>
+    </div>
+  </div>
+
+  <!-- FONCTIONNALITÉS -->
+  <div class="section reveal">
+    <p class="section-label">Fonctionnalités</p>
+    <h2 class="section-title">Ce que fait l'application</h2>
+    <p class="section-desc">
+      SuperConnect centralise la communication interne d'un supermarché
+      dans une interface moderne et intuitive, accessible à chaque agent
+      selon son rôle.
+    </p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013 5.18 2 2 0 015 3h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L9.09 10.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+          </svg>
+        </div>
+        <div class="feature-title">Appels internes</div>
+        <p class="feature-desc">Système d'appel simulé entre agents avec sonnerie, minuterie en direct et historique des appels.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
+          </svg>
+        </div>
+        <div class="feature-title">Connexion multi-rôles</div>
+        <p class="feature-desc">Chaque agent se connecte avec son rôle et accède à un dashboard personnalisé adapté à ses besoins.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/>
+          </svg>
+        </div>
+        <div class="feature-title">Surveillance en direct</div>
+        <p class="feature-desc">Simulation de caméra de surveillance animée avec horodatage en temps réel et indicateur REC.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+        </div>
+        <div class="feature-title">Flux de caisse en direct</div>
+        <p class="feature-desc">Tableau des ventes mis à jour automatiquement toutes les 4 secondes avec produits, prix et totaux.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v10M12 22v-4M4.93 10.93l7.07 7.07M19.07 10.93l-7.07 7.07M2 12h4M22 12h-4"/>
+          </svg>
+        </div>
+        <div class="feature-title">Gestion climatisation</div>
+        <p class="feature-desc">Contrôle de la température avec slider interactif et indicateurs visuels chaud / normal / froid.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <div class="feature-title">Horloge en temps réel</div>
+        <p class="feature-desc">Affichage de l'heure en direct dans la topbar et sur la caméra de surveillance, synchronisée à la seconde.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- RÔLES -->
+  <div class="section reveal">
+    <p class="section-label">Accès</p>
+    <h2 class="section-title">Les 5 rôles disponibles</h2>
+    <p class="section-desc">
+      Chaque rôle dispose de son propre dashboard avec des fonctionnalités
+      adaptées à son poste au sein du supermarché.
+    </p>
+
+    <div class="roles-grid">
+      <div class="role-card">
+        <div class="role-emoji">🛒</div>
+        <div class="role-name">Caissier·ère</div>
+        <p class="role-desc">Flux de caisse, climatisation, caméra, appels</p>
+      </div>
+      <div class="role-card">
+        <div class="role-emoji">📊</div>
+        <div class="role-name">Comptable</div>
+        <p class="role-desc">Suivi financier et communication interne</p>
+      </div>
+      <div class="role-card">
+        <div class="role-emoji">👔</div>
+        <div class="role-name">Manager</div>
+        <p class="role-desc">Vue globale et gestion des équipes</p>
+      </div>
+      <div class="role-card">
+        <div class="role-emoji">🔒</div>
+        <div class="role-name">Sécurité</div>
+        <p class="role-desc">Surveillance et alertes en temps réel</p>
+      </div>
+      <div class="role-card">
+        <div class="role-emoji">📦</div>
+        <div class="role-name">Logistique</div>
+        <p class="role-desc">Gestion des stocks et livraisons</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- APPRENTISSAGES -->
+  <div class="section reveal">
+    <p class="section-label">Apprentissages</p>
+    <h2 class="section-title">Ce que j'ai appris</h2>
+
+    <div class="learn-grid">
+      <div class="learn-item">
+        <h4>Architecture multi-fichiers</h4>
+        <p>Organisation du projet en 5 dossiers indépendants, chacun avec son HTML, CSS et JS propres, liés par une page de connexion centrale.</p>
+      </div>
+      <div class="learn-item">
+        <h4>Gestion de l'état JavaScript</h4>
+        <p>Manipulation dynamique du DOM, gestion des états (appel en cours, climatisation active) et mise à jour de l'interface en temps réel sans framework.</p>
+      </div>
+      <div class="learn-item">
+        <h4>Animations CSS avancées</h4>
+        <p>Création d'effets visuels complexes : orbes animés, grille en overlay, transitions fluides et micro-interactions sur chaque composant.</p>
+      </div>
+      <div class="learn-item">
+        <h4>Routage simple sans framework</h4>
+        <p>Redirection conditionnelle avec window.location.href selon le rôle sélectionné, simulant un système de routing sans React ou Vue.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STACK -->
+  <div class="section reveal">
+    <p class="section-label">Stack technique</p>
+    <h2 class="section-title">Technologies utilisées</h2>
+
+    <div class="stack-pills">
+      <div class="stack-pill"><span class="stack-dot"></span> HTML5</div>
+      <div class="stack-pill"><span class="stack-dot"></span> CSS3</div>
+      <div class="stack-pill"><span class="stack-dot"></span> JavaScript Vanilla</div>
+      <div class="stack-pill"><span class="stack-dot"></span> CSS Grid & Flexbox</div>
+      <div class="stack-pill"><span class="stack-dot"></span> CSS Animations</div>
+      <div class="stack-pill"><span class="stack-dot"></span> DOM Manipulation</div>
+      <div class="stack-pill"><span class="stack-dot"></span> setInterval / setTimeout</div>
+      <div class="stack-pill"><span class="stack-dot"></span> Google Fonts</div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta reveal">
+    <h2>Vous avez un projet en tête ?</h2>
+    <p>Je suis disponible pour des missions freelance. Parlons de votre idée.</p>
+    <a href="index.html#Contact" class="btn-primary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px">
+        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013 5.18 2 2 0 015 3h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L9.09 10.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+      </svg>
+      Me contacter
+    </a>
+  </div>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.08 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
