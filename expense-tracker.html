@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Tracker — Clautida</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f0faf4;
+      --bg2: #e4f5ec;
+      --accent: #2e8b57;
+      --accent2: #3cb371;
+      --accent-light: rgba(46,139,87,0.1);
+      --dark: #0f2d1c;
+      --text: #1a3a28;
+      --muted: #5a7a68;
+      --border: rgba(46,139,87,0.15);
+      --card: #ffffff;
+      --income: #059669;
+      --expense: #dc2626;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 40% at 10% 20%, rgba(46,139,87,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 90% 80%, rgba(60,179,113,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: 68px; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 60px;
+      background: rgba(240,250,244,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem; font-weight: 800;
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .nav-back {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 14px; color: var(--muted);
+      text-decoration: none; font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-back:hover { color: var(--accent); }
+    .nav-back svg { width: 16px; height: 16px; fill: currentColor; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 120px 100px 80px;
+      gap: 80px;
+    }
+
+    .hero-left { flex: 1; }
+
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--accent-light);
+      border: 1px solid rgba(46,139,87,0.2);
+      color: var(--accent);
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 6px 16px; border-radius: 20px;
+      margin-bottom: 28px;
+      animation: fadeUp 0.6s both;
+    }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(42px, 5.5vw, 72px);
+      font-weight: 800; line-height: 1.0;
+      letter-spacing: -0.03em;
+      color: var(--dark);
+      margin-bottom: 24px;
+      animation: fadeUp 0.6s 0.1s both;
+    }
+
+    .hero h1 .accent { color: var(--accent); }
+
+    .hero-desc {
+      font-size: 18px; line-height: 1.7;
+      color: var(--muted); max-width: 480px;
+      margin-bottom: 40px;
+      animation: fadeUp 0.6s 0.2s both;
+    }
+
+    .hero-badges {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      margin-bottom: 40px;
+      animation: fadeUp 0.6s 0.25s both;
+    }
+
+    .badge {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 8px; padding: 7px 16px;
+      font-size: 13px; font-weight: 500;
+      color: var(--text);
+      box-shadow: 0 2px 8px rgba(46,139,87,0.06);
+    }
+
+    .hero-actions {
+      display: flex; gap: 14px; flex-wrap: wrap;
+      animation: fadeUp 0.6s 0.3s both;
+    }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--accent); color: white;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700; font-size: 14px;
+      padding: 13px 26px; border-radius: 10px;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+      box-shadow: 0 8px 24px rgba(46,139,87,0.3);
+    }
+
+    .btn-primary:hover {
+      background: #256b44;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(46,139,87,0.4);
+    }
+
+    .btn-primary svg { width: 16px; height: 16px; }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: white; border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      font-weight: 600; font-size: 14px;
+      padding: 13px 26px; border-radius: 10px;
+      text-decoration: none; cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+
+    .btn-secondary svg { width: 16px; height: 16px; fill: currentColor; }
+
+    /* ── HERO RIGHT — App mockup ── */
+    .hero-right {
+      flex: 1; max-width: 480px;
+      animation: fadeUp 0.6s 0.15s both;
+    }
+
+    .app-mockup {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 40px 80px rgba(46,139,87,0.12), 0 0 0 1px rgba(46,139,87,0.08);
+    }
+
+    .mockup-header {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .mockup-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+    .mockup-title {
+      font-size: 12px; color: var(--muted);
+      font-weight: 500; margin-left: 8px;
+    }
+
+    .mockup-body { padding: 20px; }
+
+    .mockup-app-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 16px; font-weight: 700;
+      text-align: center; color: var(--dark);
+      margin-bottom: 14px;
+    }
+
+    .mockup-balance {
+      background: linear-gradient(135deg, #a8d5ba, #6b8e23);
+      border-radius: 12px; padding: 16px;
+      text-align: center; margin-bottom: 14px;
+    }
+
+    .mockup-balance-label {
+      font-size: 11px; color: rgba(255,255,255,0.8);
+      font-weight: 500; margin-bottom: 4px;
+    }
+
+    .mockup-balance-amount {
+      font-family: 'Syne', sans-serif;
+      font-size: 26px; font-weight: 800;
+      color: white;
+    }
+
+    .mockup-summary {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px; margin-top: 10px;
+    }
+
+    .mockup-income {
+      background: rgba(5,150,105,0.08);
+      border-radius: 8px; padding: 10px;
+    }
+
+    .mockup-expense {
+      background: rgba(220,38,38,0.08);
+      border-radius: 8px; padding: 10px;
+    }
+
+    .mockup-summary-label {
+      font-size: 11px; font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .mockup-income .mockup-summary-label { color: var(--income); }
+    .mockup-expense .mockup-summary-label { color: var(--expense); }
+
+    .mockup-summary-amount {
+      font-family: 'Syne', sans-serif;
+      font-size: 16px; font-weight: 700;
+    }
+
+    .mockup-income .mockup-summary-amount { color: var(--income); }
+    .mockup-expense .mockup-summary-amount { color: var(--expense); }
+
+    .mockup-transactions {
+      margin-top: 14px;
+    }
+
+    .mockup-tx-title {
+      font-size: 12px; font-weight: 600;
+      color: var(--muted); margin-bottom: 8px;
+    }
+
+    .mockup-tx {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 12px;
+      border-radius: 8px; margin-bottom: 6px;
+      border-right: 4px solid;
+      background: white;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      font-size: 12px;
+    }
+
+    .mockup-tx.income { border-right-color: var(--income); }
+    .mockup-tx.expense { border-right-color: var(--expense); }
+
+    .mockup-tx-amount { font-weight: 700; font-size: 13px; }
+    .mockup-tx.income .mockup-tx-amount { color: var(--income); }
+    .mockup-tx.expense .mockup-tx-amount { color: var(--expense); }
+
+    /* ── STATS ── */
+    .stats {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 80px;
+    }
+
+    .stat { background: var(--bg); padding: 40px 20px; text-align: center; }
+
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 42px; font-weight: 800;
+      color: var(--accent); margin-bottom: 6px;
+    }
+
+    .stat-lbl { font-size: 13px; color: var(--muted); }
+
+    /* ── SECTIONS ── */
+    .section {
+      position: relative; z-index: 1;
+      padding: 0 100px 80px;
+    }
+
+    .section-label {
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(28px, 3vw, 42px);
+      font-weight: 800; letter-spacing: -0.02em;
+      color: var(--dark); margin-bottom: 16px;
+    }
+
+    .section-desc {
+      font-size: 16px; color: var(--muted);
+      max-width: 600px; line-height: 1.7;
+      margin-bottom: 50px;
+    }
+
+    /* ── FEATURES ── */
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: white; border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(46,139,87,0.1);
+      border-color: rgba(46,139,87,0.3);
+    }
+
+    .feature-icon { font-size: 28px; margin-bottom: 16px; }
+
+    .feature-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 16px; font-weight: 700;
+      color: var(--dark); margin-bottom: 10px;
+    }
+
+    .feature-desc { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    /* ── APPRENTISSAGES ── */
+    .learn-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 16px; margin-top: 50px;
+    }
+
+    .learn-item {
+      background: white; border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 12px; padding: 24px;
+      transition: box-shadow 0.2s;
+    }
+
+    .learn-item:hover { box-shadow: 0 8px 24px rgba(46,139,87,0.08); }
+
+    .learn-icon { font-size: 22px; margin-bottom: 12px; }
+
+    .learn-item h4 {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px; font-weight: 700;
+      color: var(--dark); margin-bottom: 8px;
+    }
+
+    .learn-item p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    /* ── STACK ── */
+    .stack-pills {
+      display: flex; flex-wrap: wrap; gap: 12px; margin-top: 40px;
+    }
+
+    .stack-pill {
+      display: flex; align-items: center; gap: 10px;
+      background: white; border: 1px solid var(--border);
+      border-radius: 10px; padding: 12px 20px;
+      font-size: 14px; font-weight: 500;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .stack-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+
+    /* ── CTA ── */
+    .cta {
+      position: relative; z-index: 1;
+      margin: 0 100px 100px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 24px; padding: 70px;
+      text-align: center; overflow: hidden;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 80% 50%, rgba(255,255,255,0.1), transparent);
+    }
+
+    .cta h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 800; color: white;
+      letter-spacing: -0.02em; margin-bottom: 16px;
+      position: relative; z-index: 1;
+    }
+
+    .cta p {
+      font-size: 17px; color: rgba(255,255,255,0.85);
+      margin-bottom: 36px; max-width: 500px;
+      margin-left: auto; margin-right: auto;
+      position: relative; z-index: 1;
+    }
+
+    .btn-white {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: white; color: var(--accent);
+      font-family: 'Syne', sans-serif;
+      font-weight: 700; font-size: 14px;
+      padding: 13px 26px; border-radius: 10px;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      position: relative; z-index: 1;
+    }
+
+    .btn-white:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 0 20px; }
+      .hero { flex-direction: column; padding: 100px 24px 60px; gap: 40px; }
+      .hero-right { max-width: 100%; }
+      .stats { grid-template-columns: 1fr 1fr; }
+      .section { padding: 0 24px 60px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .learn-grid { grid-template-columns: 1fr; }
+      .cta { margin: 0 24px 60px; padding: 40px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html#Portfolio" class="nav-back">
+      <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+      Retour au portfolio
+    </a>
+    <a href="index.html" class="nav-logo">Clautida</a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-left">
+      <div class="hero-tag">💰 Projet web · Application financière</div>
+      <h1>Expense<br><span class="accent">Tracker</span></h1>
+      <p class="hero-desc">
+        Application de suivi des dépenses personnelles permettant
+        d'ajouter, visualiser et supprimer des transactions,
+        avec calcul automatique du solde, des revenus et des dépenses.
+      </p>
+      <div class="hero-badges">
+        <span class="badge">HTML5</span>
+        <span class="badge">CSS3</span>
+        <span class="badge">JavaScript</span>
+        <span class="badge">localStorage</span>
+        <span class="badge">Responsive</span>
+      </div>
+      <div class="hero-actions">
+        <a href="https://clautida123-beep.github.io/expense-traquer/" target="_blank" class="btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Voir le projet en live
+        </a>
+        <a href="https://github.com/clautida123-beep/expense-traquer" target="_blank" class="btn-secondary">
+          <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.37.6.1.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.08-.74.08-.72.08-.72 1.2.08 1.83 1.23 1.83 1.23 1.06 1.82 2.8 1.3 3.48.99.1-.77.41-1.3.75-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          Voir sur GitHub
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="app-mockup">
+        <div class="mockup-header">
+          <div class="mockup-dot" style="background:#ff5f57"></div>
+          <div class="mockup-dot" style="background:#febc2e"></div>
+          <div class="mockup-dot" style="background:#28c840"></div>
+          <span class="mockup-title">Expense Tracker</span>
+        </div>
+        <div class="mockup-body">
+          <div class="mockup-app-title">Expense Tracker</div>
+          <div class="mockup-balance">
+            <div class="mockup-balance-label">Your Balance</div>
+            <div class="mockup-balance-amount">$1,250.00</div>
+            <div class="mockup-summary">
+              <div class="mockup-income">
+                <div class="mockup-summary-label">Income</div>
+                <div class="mockup-summary-amount">$2,000.00</div>
+              </div>
+              <div class="mockup-expense">
+                <div class="mockup-summary-label">Expenses</div>
+                <div class="mockup-summary-amount">-$750.00</div>
+              </div>
+            </div>
+          </div>
+          <div class="mockup-transactions">
+            <div class="mockup-tx-title">Transactions</div>
+            <div class="mockup-tx income">
+              <span>Salary</span>
+              <span class="mockup-tx-amount">+$2,000</span>
+            </div>
+            <div class="mockup-tx expense">
+              <span>Groceries</span>
+              <span class="mockup-tx-amount">-$350</span>
+            </div>
+            <div class="mockup-tx expense">
+              <span>Netflix</span>
+              <span class="mockup-tx-amount">-$400</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats reveal">
+    <div class="stat">
+      <div class="stat-num">3</div>
+      <div class="stat-lbl">Données calculées en temps réel</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">∞</div>
+      <div class="stat-lbl">Transactions possibles</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">💾</div>
+      <div class="stat-lbl">Sauvegarde localStorage</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">100%</div>
+      <div class="stat-lbl">Vanilla JS</div>
+    </div>
+  </div>
+
+  <!-- FONCTIONNALITÉS -->
+  <div class="section reveal">
+    <p class="section-label">Fonctionnalités</p>
+    <h2 class="section-title">Ce que fait l'application</h2>
+    <p class="section-desc">
+      Un tracker de dépenses complet qui calcule automatiquement
+      le solde, les revenus et les dépenses à chaque ajout ou
+      suppression de transaction.
+    </p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">➕</div>
+        <div class="feature-title">Ajout de transactions</div>
+        <p class="feature-desc">Formulaire simple avec description et montant. Les valeurs positives sont des revenus, les négatives des dépenses.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🗑️</div>
+        <div class="feature-title">Suppression de transactions</div>
+        <p class="feature-desc">Bouton de suppression discret qui apparaît au survol de chaque transaction pour une interface propre.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💰</div>
+        <div class="feature-title">Calcul automatique du solde</div>
+        <p class="feature-desc">Le solde total, les revenus et les dépenses se mettent à jour instantanément après chaque action.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💾</div>
+        <div class="feature-title">Sauvegarde automatique</div>
+        <p class="feature-desc">Les transactions sont sauvegardées dans le localStorage — elles persistent même après fermeture du navigateur.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎨</div>
+        <div class="feature-title">Code couleur visuel</div>
+        <p class="feature-desc">Les revenus sont affichés en vert et les dépenses en rouge, avec une bordure latérale colorée sur chaque transaction.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <div class="feature-title">Responsive design</div>
+        <p class="feature-desc">Interface adaptée aux mobiles et tablettes avec grille flexible et mise en page verticale sur petits écrans.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- APPRENTISSAGES -->
+  <div class="section reveal">
+    <p class="section-label">Apprentissages</p>
+    <h2 class="section-title">Ce que j'ai appris</h2>
+
+    <div class="learn-grid">
+      <div class="learn-item">
+        <div class="learn-icon">💾</div>
+        <h4>localStorage</h4>
+        <p>Persistance des données côté navigateur avec JSON.stringify et JSON.parse pour sauvegarder et récupérer les transactions entre les sessions.</p>
+      </div>
+      <div class="learn-item">
+        <div class="learn-icon">🔢</div>
+        <h4>Array.reduce()</h4>
+        <p>Utilisation de reduce() pour calculer le solde total, les revenus et les dépenses en parcourant le tableau des transactions.</p>
+      </div>
+      <div class="learn-item">
+        <div class="learn-icon">🎯</div>
+        <h4>Intl.NumberFormat</h4>
+        <p>Formatage professionnel des montants en devise USD grâce à l'API native Intl.NumberFormat pour un affichage clair et standardisé.</p>
+      </div>
+      <div class="learn-item">
+        <div class="learn-icon">🎬</div>
+        <h4>Animations CSS</h4>
+        <p>Animation slideIn sur chaque nouvelle transaction et effets hover sur les éléments interactifs pour une expérience fluide.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STACK -->
+  <div class="section reveal">
+    <p class="section-label">Stack technique</p>
+    <h2 class="section-title">Technologies utilisées</h2>
+
+    <div class="stack-pills">
+      <div class="stack-pill"><span class="stack-dot"></span> HTML5</div>
+      <div class="stack-pill"><span class="stack-dot"></span> CSS3</div>
+      <div class="stack-pill"><span class="stack-dot"></span> JavaScript Vanilla</div>
+      <div class="stack-pill"><span class="stack-dot"></span> localStorage API</div>
+      <div class="stack-pill"><span class="stack-dot"></span> Array.reduce()</div>
+      <div class="stack-pill"><span class="stack-dot"></span> Intl.NumberFormat</div>
+      <div class="stack-pill"><span class="stack-dot"></span> CSS Grid & Flexbox</div>
+      <div class="stack-pill"><span class="stack-dot"></span> CSS Animations</div>
+      <div class="stack-pill"><span class="stack-dot"></span> Google Fonts (Poppins)</div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta reveal">
+    <h2>Vous avez un projet en tête ?</h2>
+    <p>Je suis disponible pour des missions freelance. Parlons de votre idée.</p>
+    <a href="index.html#Contact" class="btn-white">Me contacter</a>
+  </div>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.08 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

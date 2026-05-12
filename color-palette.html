@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color Palette Generator — Clautida</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f8f6ff;
+      --bg2: #ede9fe;
+      --accent: #667eea;
+      --accent2: #764ba2;
+      --accent-light: rgba(102,126,234,0.1);
+      --dark: #1a1040;
+      --text: #2d2060;
+      --muted: #6b6890;
+      --border: rgba(102,126,234,0.15);
+      --card: #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 40% at 10% 20%, rgba(102,126,234,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 90% 80%, rgba(118,75,162,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: 68px; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 60px;
+      background: rgba(248,246,255,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem; font-weight: 800;
+      color: var(--accent); text-decoration: none;
+    }
+
+    .nav-back {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 14px; color: var(--muted);
+      text-decoration: none; font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-back:hover { color: var(--accent); }
+    .nav-back svg { width: 16px; height: 16px; fill: currentColor; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 120px 100px 80px;
+      gap: 80px;
+    }
+
+    .hero-left { flex: 1; }
+
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--accent-light);
+      border: 1px solid rgba(102,126,234,0.2);
+      color: var(--accent);
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 6px 16px; border-radius: 20px;
+      margin-bottom: 28px;
+      animation: fadeUp 0.6s both;
+    }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(38px, 5vw, 68px);
+      font-weight: 800; line-height: 1.0;
+      letter-spacing: -0.03em;
+      color: var(--dark); margin-bottom: 24px;
+      animation: fadeUp 0.6s 0.1s both;
+    }
+
+    .hero h1 .gradient {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      background-clip: text; -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
+      font-size: 18px; line-height: 1.7;
+      color: var(--muted); max-width: 480px;
+      margin-bottom: 40px;
+      animation: fadeUp 0.6s 0.2s both;
+    }
+
+    .hero-badges {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      margin-bottom: 40px;
+      animation: fadeUp 0.6s 0.25s both;
+    }
+
+    .badge {
+      background: white; border: 1px solid var(--border);
+      border-radius: 8px; padding: 7px 16px;
+      font-size: 13px; font-weight: 500; color: var(--text);
+      box-shadow: 0 2px 8px rgba(102,126,234,0.06);
+    }
+
+    .hero-actions {
+      display: flex; gap: 14px; flex-wrap: wrap;
+      animation: fadeUp 0.6s 0.3s both;
+    }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: white;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700; font-size: 14px;
+      padding: 13px 26px; border-radius: 10px;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 8px 24px rgba(102,126,234,0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(102,126,234,0.4);
+    }
+
+    .btn-primary svg { width: 16px; height: 16px; }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: white; border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      font-weight: 600; font-size: 14px;
+      padding: 13px 26px; border-radius: 10px;
+      text-decoration: none; cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+
+    .btn-secondary svg { width: 16px; height: 16px; fill: currentColor; }
+
+    /* ── HERO RIGHT — Palette mockup ── */
+    .hero-right {
+      flex: 1; max-width: 500px;
+      animation: fadeUp 0.6s 0.15s both;
+    }
+
+    .palette-mockup {
+      background: white; border-radius: 20px; overflow: hidden;
+      box-shadow: 0 40px 80px rgba(102,126,234,0.12), 0 0 0 1px rgba(102,126,234,0.08);
+    }
+
+    .mockup-header {
+      background: var(--bg2); border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .mockup-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+    .mockup-title {
+      font-size: 12px; color: var(--muted);
+      font-weight: 500; margin-left: 8px;
+    }
+
+    .mockup-body { padding: 24px; }
+
+    .mockup-app-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 16px; font-weight: 700;
+      text-align: center; color: var(--dark);
+      margin-bottom: 4px;
+    }
+
+    .mockup-underline {
+      width: 50%; height: 3px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 2px; margin: 0 auto 20px;
+    }
+
+    .mockup-btn {
+      display: block; width: 100%;
+      padding: 10px;
+      background: linear-gradient(45deg, var(--accent), var(--accent2));
+      color: white; border: none; border-radius: 50px;
+      font-size: 13px; font-weight: 600;
+      text-align: center; margin-bottom: 20px;
+      cursor: default;
+    }
+
+    .mockup-palette {
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+
+    .mockup-color-box {
+      border-radius: 8px; overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .mockup-color {
+      height: 70px;
+    }
+
+    .mockup-color-info {
+      background: white; padding: 6px;
+      font-size: 9px; font-weight: 500;
+      color: var(--muted); text-align: center;
+    }
+
+    /* ── STATS ── */
+    .stats {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1px; background: var(--border);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 80px;
+    }
+
+    .stat { background: var(--bg); padding: 40px 20px; text-align: center; }
+
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 42px; font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      background-clip: text; -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+
+    .stat-lbl { font-size: 13px; color: var(--muted); }
+
+    /* ── SECTIONS ── */
+    .section {
+      position: relative; z-index: 1;
+      padding: 0 100px 80px;
+    }
+
+    .section-label {
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(28px, 3vw, 42px);
+      font-weight: 800; letter-spacing: -0.02em;
+      color: var(--dark); margin-bottom: 16px;
+    }
+
+    .section-desc {
+      font-size: 16px; color: var(--muted);
+      max-width: 600px; line-height: 1.7; margin-bottom: 50px;
+    }
+
+    /* ── FEATURES ── */
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    }
+
+    .feature-card {
+      background: white; border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(102,126,234,0.1);
+      border-color: rgba(102,126,234,0.3);
+    }
+
+    .feature-icon { font-size: 28px; margin-bottom: 16px; }
+
+    .feature-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 16px; font-weight: 700;
+      color: var(--dark); margin-bottom: 10px;
+    }
+
+    .feature-desc { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    /* ── DÉMO COULEURS ── */
+    .colors-demo {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      margin-top: 50px;
+    }
+
+    .color-sample {
+      width: 80px; height: 80px; border-radius: 14px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      transition: transform 0.2s;
+      cursor: pointer;
+    }
+
+    .color-sample:hover { transform: scale(1.1) translateY(-4px); }
+
+    /* ── APPRENTISSAGES ── */
+    .learn-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 16px; margin-top: 50px;
+    }
+
+    .learn-item {
+      background: white; border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 12px; padding: 24px;
+      transition: box-shadow 0.2s;
+    }
+
+    .learn-item:hover { box-shadow: 0 8px 24px rgba(102,126,234,0.08); }
+    .learn-icon { font-size: 22px; margin-bottom: 12px; }
+
+    .learn-item h4 {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px; font-weight: 700;
+      color: var(--dark); margin-bottom: 8px;
+    }
+
+    .learn-item p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    /* ── STACK ── */
+    .stack-pills { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 40px; }
+
+    .stack-pill {
+      display: flex; align-items: center; gap: 10px;
+      background: white; border: 1px solid var(--border);
+      border-radius: 10px; padding: 12px 20px;
+      font-size: 14px; font-weight: 500;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .stack-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+    }
+
+    /* ── CTA ── */
+    .cta {
+      position: relative; z-index: 1;
+      margin: 0 100px 100px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 24px; padding: 70px;
+      text-align: center; overflow: hidden;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 80% 50%, rgba(255,255,255,0.1), transparent);
+    }
+
+    .cta h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 800; color: white;
+      letter-spacing: -0.02em; margin-bottom: 16px;
+      position: relative; z-index: 1;
+    }
+
+    .cta p {
+      font-size: 17px; color: rgba(255,255,255,0.85);
+      margin-bottom: 36px; max-width: 500px;
+      margin-left: auto; margin-right: auto;
+      position: relative; z-index: 1;
+    }
+
+    .btn-white {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: white; color: var(--accent);
+      font-family: 'Syne', sans-serif;
+      font-weight: 700; font-size: 14px;
+      padding: 13px 26px; border-radius: 10px;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      position: relative; z-index: 1;
+    }
+
+    .btn-white:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,0,0,0.2); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 0 20px; }
+      .hero { flex-direction: column; padding: 100px 24px 60px; gap: 40px; }
+      .hero-right { max-width: 100%; }
+      .stats { grid-template-columns: 1fr 1fr; }
+      .section { padding: 0 24px 60px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .learn-grid { grid-template-columns: 1fr; }
+      .cta { margin: 0 24px 60px; padding: 40px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html#Portfolio" class="nav-back">
+      <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+      Retour au portfolio
+    </a>
+    <a href="index.html" class="nav-logo">Clautida</a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-left">
+      <div class="hero-tag">🎨 Projet web · Outil créatif</div>
+      <h1>Color Palette<br><span class="gradient">Generator</span></h1>
+      <p class="hero-desc">
+        Un générateur de palettes de couleurs aléatoires avec
+        5 couleurs par palette, affichage des codes HEX et
+        copie en un clic dans le presse-papiers.
+      </p>
+      <div class="hero-badges">
+        <span class="badge">HTML5</span>
+        <span class="badge">CSS3</span>
+        <span class="badge">JavaScript</span>
+        <span class="badge">Clipboard API</span>
+        <span class="badge">Responsive</span>
+      </div>
+      <div class="hero-actions">
+        <a href="https://clautida123-beep.github.io/color-palette-generator/" target="_blank" class="btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Voir le projet en live
+        </a>
+        <a href="https://github.com/clautida123-beep/color-palette-generator" target="_blank" class="btn-secondary">
+          <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.37.6.1.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.08-.74.08-.72.08-.72 1.2.08 1.83 1.23 1.83 1.23 1.06 1.82 2.8 1.3 3.48.99.1-.77.41-1.3.75-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          Voir sur GitHub
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="palette-mockup">
+        <div class="mockup-header">
+          <div class="mockup-dot" style="background:#ff5f57"></div>
+          <div class="mockup-dot" style="background:#febc2e"></div>
+          <div class="mockup-dot" style="background:#28c840"></div>
+          <span class="mockup-title">Color Palette Generator</span>
+        </div>
+        <div class="mockup-body">
+          <div class="mockup-app-title">Color Palette Generator</div>
+          <div class="mockup-underline"></div>
+          <div class="mockup-btn">✨ Generate Palette</div>
+          <div class="mockup-palette">
+            <div class="mockup-color-box">
+              <div class="mockup-color" style="background:#667eea"></div>
+              <div class="mockup-color-info">#667EEA</div>
+            </div>
+            <div class="mockup-color-box">
+              <div class="mockup-color" style="background:#764ba2"></div>
+              <div class="mockup-color-info">#764BA2</div>
+            </div>
+            <div class="mockup-color-box">
+              <div class="mockup-color" style="background:#f093fb"></div>
+              <div class="mockup-color-info">#F093FB</div>
+            </div>
+            <div class="mockup-color-box">
+              <div class="mockup-color" style="background:#4facfe"></div>
+              <div class="mockup-color-info">#4FACFE</div>
+            </div>
+            <div class="mockup-color-box">
+              <div class="mockup-color" style="background:#43e97b"></div>
+              <div class="mockup-color-info">#43E97B</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats reveal">
+    <div class="stat">
+      <div class="stat-num">5</div>
+      <div class="stat-lbl">Couleurs par palette</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">16M+</div>
+      <div class="stat-lbl">Combinaisons possibles</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">1 clic</div>
+      <div class="stat-lbl">Pour copier un HEX</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">100%</div>
+      <div class="stat-lbl">Vanilla JS</div>
+    </div>
+  </div>
+
+  <!-- FONCTIONNALITÉS -->
+  <div class="section reveal">
+    <p class="section-label">Fonctionnalités</p>
+    <h2 class="section-title">Ce que fait l'application</h2>
+    <p class="section-desc">
+      Un outil simple et élégant pour générer des palettes de couleurs
+      aléatoires, idéal pour les designers et développeurs en quête d'inspiration.
+    </p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🎲</div>
+        <div class="feature-title">Génération aléatoire</div>
+        <p class="feature-desc">Un clic sur le bouton génère instantanément 5 couleurs aléatoires parmi plus de 16 millions de combinaisons possibles.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📋</div>
+        <div class="feature-title">Copie en un clic</div>
+        <p class="feature-desc">Cliquez sur le bouton copier ou directement sur la couleur pour copier le code HEX dans le presse-papiers instantanément.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">✅</div>
+        <div class="feature-title">Feedback visuel</div>
+        <p class="feature-desc">L'icône de copie se transforme en coche verte pendant 1,5 secondes pour confirmer que le HEX a bien été copié.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎨</div>
+        <div class="feature-title">Affichage des codes HEX</div>
+        <p class="feature-desc">Chaque couleur affiche son code HEX en clair sous la couleur pour une utilisation directe dans du code ou des logiciels de design.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">✨</div>
+        <div class="feature-title">Animations soignées</div>
+        <p class="feature-desc">Effets hover avec élévation des cartes, transitions fluides et soulignement animé du titre pour une expérience agréable.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <div class="feature-title">Responsive design</div>
+        <p class="feature-desc">La grille de couleurs s'adapte automatiquement à toutes les tailles d'écran grâce à CSS Grid avec auto-fit.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- DÉMO COULEURS -->
+  <div class="section reveal">
+    <p class="section-label">Aperçu</p>
+    <h2 class="section-title">Exemples de palettes générées</h2>
+    <p class="section-desc">Chaque clic produit une palette unique — voici quelques exemples de ce que le générateur peut produire.</p>
+
+    <div class="colors-demo">
+      <div class="color-sample" style="background:#667eea"></div>
+      <div class="color-sample" style="background:#764ba2"></div>
+      <div class="color-sample" style="background:#f093fb"></div>
+      <div class="color-sample" style="background:#4facfe"></div>
+      <div class="color-sample" style="background:#43e97b"></div>
+      <div class="color-sample" style="background:#fa709a"></div>
+      <div class="color-sample" style="background:#fee140"></div>
+      <div class="color-sample" style="background:#30cfd0"></div>
+      <div class="color-sample" style="background:#a18cd1"></div>
+      <div class="color-sample" style="background:#ff9a9e"></div>
+    </div>
+  </div>
+
+  <!-- APPRENTISSAGES -->
+  <div class="section reveal">
+    <p class="section-label">Apprentissages</p>
+    <h2 class="section-title">Ce que j'ai appris</h2>
+
+    <div class="learn-grid">
+      <div class="learn-item">
+        <div class="learn-icon">📋</div>
+        <h4>Clipboard API</h4>
+        <p>Utilisation de navigator.clipboard.writeText() pour copier du texte dans le presse-papiers avec gestion des promesses .then() et .catch().</p>
+      </div>
+      <div class="learn-item">
+        <div class="learn-icon">🎲</div>
+        <h4>Génération aléatoire</h4>
+        <p>Construction d'une couleur HEX aléatoire caractère par caractère avec Math.random() et un tableau de 16 caractères hexadécimaux.</p>
+      </div>
+      <div class="learn-item">
+        <div class="learn-icon">🎯</div>
+        <h4>Event delegation</h4>
+        <p>Utilisation de la délégation d'événements sur le conteneur parent pour gérer les clics sur tous les boutons de copie avec un seul listener.</p>
+      </div>
+      <div class="learn-item">
+        <div class="learn-icon">🔗</div>
+        <h4>previousElementSibling</h4>
+        <p>Navigation dans le DOM avec previousElementSibling et nextElementSibling pour accéder aux éléments adjacents sans sélecteurs complexes.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STACK -->
+  <div class="section reveal">
+    <p class="section-label">Stack technique</p>
+    <h2 class="section-title">Technologies utilisées</h2>
+
+    <div class="stack-pills">
+      <div class="stack-pill"><span class="stack-dot"></span> HTML5</div>
+      <div class="stack-pill"><span class="stack-dot"></span> CSS3</div>
+      <div class="stack-pill"><span class="stack-dot"></span> JavaScript Vanilla</div>
+      <div class="stack-pill"><span class="stack-dot"></span> Clipboard API</div>
+      <div class="stack-pill"><span class="stack-dot"></span> Math.random()</div>
+      <div class="stack-pill"><span class="stack-dot"></span> Event Delegation</div>
+      <div class="stack-pill"><span class="stack-dot"></span> CSS Grid auto-fit</div>
+      <div class="stack-pill"><span class="stack-dot"></span> CSS Transitions</div>
+      <div class="stack-pill"><span class="stack-dot"></span> Google Fonts (Poppins)</div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta reveal">
+    <h2>Vous avez un projet en tête ?</h2>
+    <p>Je suis disponible pour des missions freelance. Parlons de votre idée.</p>
+    <a href="index.html#Contact" class="btn-white">Me contacter</a>
+  </div>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.08 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
